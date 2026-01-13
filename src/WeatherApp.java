@@ -66,6 +66,7 @@ public class WeatherApp{
             city.displayWeather(cityName);
 
         } catch (Exception e) {
+            System.out.println("Please enter valid city name");
             System.out.println("Error: " + e.getMessage());
         }
     }
@@ -98,12 +99,14 @@ public class WeatherApp{
         String cityName = scanner.nextLine();
 
         if(favorites.size() >= 3){
-            System.out.println("*** Maximum number of favorites added ***");
+            System.out.println("*** Maximum number of favorites already added ***");
+            return;
         }
 
         for(City city : favorites) {
             if(city.getName().equalsIgnoreCase(cityName)) {
-                System.out.println("***" + cityName + " is already in favorites. ");
+                System.out.println("***" + city.getName() + " is already in favorites. ");
+                return;
             }
         }
 
@@ -114,7 +117,6 @@ public class WeatherApp{
         } catch (Exception e){
             System.out.println("Error: " + e.getMessage());
             }
-
         }
 
     private void removefromFav(){
