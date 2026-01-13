@@ -4,10 +4,10 @@ public class City {
     private double temp;
     private String weatherDescription;
     private double feelsLike;
-    private double humidity;
+    private int humidity;
     private double windSpeed;
 
-    public City(String name, String country, double temp, String weatherDescription, double feelsLike, double humidity, double windSpeed) {
+    public City(String name, String country, double temp, String weatherDescription, double feelsLike, int humidity, double windSpeed) {
         this.name = name;
         this.country = country;
         this.temp = temp;
@@ -33,7 +33,7 @@ public class City {
         return feelsLike;
     }
 
-    public double getHumidity() {
+    public int getHumidity() {
         return humidity;
     }
 
@@ -41,15 +41,19 @@ public class City {
         return weatherDescription;
     }
 
-    public void getWeather() {
-        System.out.println("\n===============");
-        System.out.println("City: " + name + ", " + country);
+    public void displayWeather(String cityName) {
+        System.out.println("===============");
+        System.out.println("City: " + cityName + ", " + country);
         System.out.println("Temperature: " + temp + "°F");
         System.out.println("Feels Like: " + feelsLike + "°F");
         System.out.println("Weather: " + weatherDescription);
         System.out.println("Humidity: " + humidity + "%");
         System.out.println("Wind Speed: " + windSpeed + "mph");
         System.out.println("===============\n");
+    }
+
+    public String toString(){
+        return String.format("%s, %s - %.1f°F - %s", name, country, temp, weatherDescription);
     }
 }
 

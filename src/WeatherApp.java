@@ -1,12 +1,10 @@
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
-import java.lang.Throwable;
-import java.lang.NullPointerException;
 
 public class WeatherApp{
     private final Scanner scanner;
-    private List <String> favorites;
+    private List <City> favorites;
     private final WeatherAPI weatherApi;
 
     public WeatherApp(String apiKey) {
@@ -15,7 +13,7 @@ public class WeatherApp{
         this.weatherApi = new WeatherAPI(apiKey);
     }
     public void run() {
-        System.out.println("----Welcome to the Weather App----\n");
+        System.out.println("----Welcome to the Weather App----");
 
         boolean running = true;
 
@@ -55,7 +53,21 @@ public class WeatherApp{
     }
 
     private void SearchWeather(){
+        System.out.println("\nEnter city name: ");
+        String cityName = scanner.nextLine();
 
+        if (cityName.isEmpty()) {
+            System.out.println("City name cannot be empty.");
+            return;
+        }
+
+        try {
+            City city = weatherApi.getWeather(cityName);
+            city.displayWeather(cityName);
+
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
     private void updateList(){
         System.out.println("\n1. Add City");
@@ -83,17 +95,28 @@ public class WeatherApp{
 
     private void addtoFav(){
         System.out.println("\n Enter City to add: ");
-        String city = scanner.nextLine();
+        String cityName = scanner.nextLine();
 
         if(favorites.size() >= 3){
             System.out.println("*** Maximum number of favorites added ***");
-        }else if(favorites.contains(city)){
-            System.out.println("***" + city + " is already in favorites. ");
-        }else {
-            favorites.add(city);
-            System.out.println(city + " added to favorites list");
         }
-    }
+
+        for(City city : favorites) {
+            if(city.getName().equalsIgnoreCase(cityName)) {
+                System.out.println("***" + cityName + " is already in favorites. ");
+            }
+        }
+
+        try {
+            City city = weatherApi.getWeather(cityName);
+            favorites.add(city);
+            System.out.println(cityName + " added to favorites list");
+        } catch (Exception e){
+            System.out.println("Error: " + e.getMessage());
+            }
+
+        }
+
     private void removefromFav(){
         //Different error message than listFavorites()
         if(favorites.isEmpty()) {
@@ -108,7 +131,7 @@ public class WeatherApp{
             int index = Integer.parseInt(scanner.nextLine()) - 1;
 
             if(index >= 0 && index < favorites.size()){
-                String removed = favorites.remove(index);
+                String removed = String.valueOf(favorites.remove(index));
                 System.out.println("Removed: " + removed);
             }else {
                 System.out.println("Invalid number");
@@ -127,7 +150,6 @@ public class WeatherApp{
         }else{
             for(int i = 0; i < favorites.size(); i++){
                 System.out.println((i + 1) + ". " + favorites.get(i));
-            //Add weather details
             }
         }
     }

@@ -1,9 +1,4 @@
-import javax.net.ssl.HttpsURLConnection;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URI;
-import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -17,9 +12,9 @@ public class WeatherAPI {
         this.httpClient = HttpClient.newHttpClient();
     }
 
-    public String getWeather(String cityName) throws Exception {
+    public City getWeather(String cityName) throws Exception {
         String url = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName.replace(" ", "%20")
-                + "&appid=" + apiKey;
+                + "&appid=" + apiKey + "&units=imperial";
 
 
         HttpRequest request = HttpRequest.newBuilder()
@@ -34,7 +29,7 @@ public class WeatherAPI {
         if(response.statusCode() != 200){
             throw new Exception("API Error " + response.statusCode());
         }
-        return response.body();
+        return parseWeatherData(response.body());
     }
 
     public City parseWeatherData(String json){
@@ -57,7 +52,7 @@ public class WeatherAPI {
             }
 
             String windStr = extractValue(json, "\"speed\":", ",");
-            double windSpeed = Double.parseDouble(windStr);
+            double windSpeed = windStr.isEmpty() ? 0.0 : Double.parseDouble(windStr);
 
             return new City(name, country, temp, description,
                     feelsLike, humidity, windSpeed);
@@ -67,12 +62,12 @@ public class WeatherAPI {
         }
     }
 
-    private String extractValue(String json, String key, String endchar){
+    private String extractValue(String json, String key, String endChar){
         int startIndex = json.indexOf(key);
         if(startIndex == -1) return "";
 
         startIndex += key.length();
-        int endIndex = json.indexOf(key);
+        int endIndex = json.indexOf(endChar, startIndex);
         if(endIndex == -1) endIndex = json.length();
 
         return json.substring(startIndex, endIndex);
