@@ -1,14 +1,18 @@
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
+import java.lang.Throwable;
+import java.lang.NullPointerException;
 
 public class WeatherApp{
-    private Scanner scanner;
+    private final Scanner scanner;
     private List <String> favorites;
+    private final WeatherAPI weatherApi;
 
-    public WeatherApp() {
+    public WeatherApp(String apiKey) {
         this.scanner = new Scanner(System.in);
         this.favorites = new ArrayList<>();
+        this.weatherApi = new WeatherAPI(apiKey);
     }
     public void run() {
         System.out.println("----Welcome to the Weather App----\n");
@@ -36,14 +40,14 @@ public class WeatherApp{
                 default:
                     System.out.println("Invalid choice. Please Try Again.");
                     //Pause for user
-                    try { Thread.sleep(1000); } catch (InterruptedException e){}
+                    try { Thread.sleep(1000); } catch (InterruptedException _){}
             }
         }
         scanner.close();
     }
 
     private void showMenu(){
-        System.out.println("          MAIN MENU\n");
+        System.out.println("\n\n          MAIN MENU\n");
         System.out.println("1. Select City");
         System.out.println("2. Manage favorites");
         System.out.println("3. List favorites");
@@ -54,7 +58,7 @@ public class WeatherApp{
 
     }
     private void updateList(){
-        System.out.println("1. Add City");
+        System.out.println("\n1. Add City");
         System.out.println("2. Remove a city");
         System.out.println("3. Return to menu");
 
@@ -73,7 +77,7 @@ public class WeatherApp{
             default:
                 System.out.println("Invalid choice. Please try again.");
                 //Pause for user
-                try { Thread.sleep(1000); } catch (InterruptedException e){}
+                try { Thread.sleep(1000); } catch (InterruptedException _){}
         }
     }
 

@@ -3,9 +3,12 @@
 
 public class Main {
   static void main(String[] args) {
-    System.out.println("Weather App Starting...");
 
-    WeatherApp app = new WeatherApp();
+    String apiKey = "77bd31a2d6319efd86cc1868dbb0260f";
+    System.out.println("Weather App Starting...\n");
+
+
+    WeatherApp app = new WeatherApp(apiKey);
     app.run();
   }
 }
